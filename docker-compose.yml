@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - my_network
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=yourdbname;User=sa;Password=Admin6969;Trusted_Connection=False;MultipleActiveResultSets=true;
+
+  db:
+    container_name: db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Admin6969
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Admin6969 -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+networks:
+  my_network:
+    driver: bridge
