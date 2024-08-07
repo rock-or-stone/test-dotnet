@@ -9,12 +9,7 @@ namespace App
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException("Connection string not found.");
-            }
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(@"Server=sqldata,1433;InitialCatalog=OnlineShopDb;Database=OnlineShopDb;User=sa;Password=P@ssW0rd;TrustServerCertificate=true;");
         }
     }
 }
